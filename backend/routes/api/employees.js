@@ -24,7 +24,7 @@ router.delete(
   employeesController.deleteSub
 );
 
-//add new records to subjects and reports in admin pannel
+//add new records to subjects and reports in admin
 router.put(
   "/addsub/:id",
   verifyRoles(ROLES_LIST.Admin),
