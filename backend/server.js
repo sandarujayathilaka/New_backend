@@ -25,6 +25,13 @@ app.use(cookieParser());
 
 
 // routes
+
+app.use("/",(req,res)=>{
+  return res.json({
+    message:"Welcome To AG Office"
+  })
+})
+
 app.use('/', require('./routes/root'));
 app.use('/register', require('./routes/register'));
 app.use('/auth', require('./routes/auth'));
