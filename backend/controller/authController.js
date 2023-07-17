@@ -79,8 +79,8 @@ const forget = async (req, res) => {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "denojanse1009@gmail.com",
-        pass: "xbwlmvckpinhbthi",
+        user: "offsys.pwchange@gmail.com",
+        pass: "steeeeukszdwgnjy",
       },
       tls: {
         rejectUnauthorized: false,
@@ -88,7 +88,7 @@ const forget = async (req, res) => {
     });
 
     var mailOptions = {
-      from: "denojanse1009@gmail.com",
+      from: "offsys.pwchange@gmail.com",
       to: email,
       subject: "Password Reset",
       text: `Your new password is: ${password}. \nYou change login using this password and update new password using this as your current password. `,
