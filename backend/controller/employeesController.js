@@ -1,6 +1,7 @@
-const Employee = require('../models/Employee');
-const User = require('../models/User');
-const ROLES_LIST = require('../config/roles_list');
+const Employee = require("../models/Employee");
+const User = require("../models/User");
+const beneficiaryModel = require("../models/beneficiaryModel");
+const ROLES_LIST = require("../config/roles_list");
 
 
 const getAllEmployees = async (req, res) => {
@@ -105,35 +106,30 @@ const createNewEmployee = async (req, res) => {
 const updateSubject = async (req, res) => {
   const { id, index } = req.params;
   const { status } = req.body;
-  
+
   if (!id) {
-    return res.status(400).json({ 'message': 'ID parameter is required.' });
+    return res.status(400).json({ message: "ID parameter is required." });
   }
 
   const employee = await Employee.findOne({ _id: id });
 
   if (!employee) {
-    return res.status(204).json({ "message": `No employee matches ID ${id}.` });
+    return res.status(204).json({ message: `No employee matches ID ${id}.` });
   }
 
   if (req.body.eid) {
     employee.eid = req.body.eid;
   }
 
-
-  if (status === 'subject') {
-  
+  if (status === "subject") {
     if (req.body.subject && req.body.subject[index]) {
-      
       employee.subject[index].name = req.body.subject[index].name;
     }
-  } else if (status === 'report') {
+  } else if (status === "report") {
     if (req.body.report && req.body.report[index]) {
       employee.report[index].name = req.body.report[index].name;
-
     }
   }
- 
 
   const result = await employee.save();
   res.json(result);
@@ -168,85 +164,143 @@ const getEmployee = async (req, res) => {
 
 const addSub = async (req, res) => {
   if (req.body.roles && req.body.roles.Divisional_Secretariat) {
-    
-    const existingEditor = await Employee.findOne({ "roles.Divisional_Secretariat": { $exists: true }, _id: { $ne: req.params.id } });
+    const existingEditor = await Employee.findOne({
+      "roles.Divisional_Secretariat": { $exists: true },
+      _id: { $ne: req.params.id },
+    });
     if (existingEditor) {
-      return res.status(405).json({ message: "An Divisional_Secretariat already exists. Only one Divisional_Secretariat is allowed." });
+      return res
+        .status(405)
+        .json({
+          message:
+            "An Divisional_Secretariat already exists. Only one Divisional_Secretariat is allowed.",
+        });
     }
   }
   if (req.body.roles && req.body.roles.Admin) {
-    
-    const existingAdmin = await Employee.findOne({ "roles.Admin": { $exists: true }, _id: { $ne: req.params.id } });
+    const existingAdmin = await Employee.findOne({
+      "roles.Admin": { $exists: true },
+      _id: { $ne: req.params.id },
+    });
     if (existingAdmin) {
-      return res.status(405).json({ message: "An Admin already exists. Only one Admin is allowed." });
+      return res
+        .status(405)
+        .json({
+          message: "An Admin already exists. Only one Admin is allowed.",
+        });
     }
   }
   if (req.body.roles && req.body.roles.Assistant_Director) {
-    
-    const existingAssistant_Director = await Employee.findOne({ "roles.Assistant_Director": { $exists: true }, _id: { $ne: req.params.id } });
+    const existingAssistant_Director = await Employee.findOne({
+      "roles.Assistant_Director": { $exists: true },
+      _id: { $ne: req.params.id },
+    });
     if (existingAssistant_Director) {
-      return res.status(405).json({ message: "An Assistant_Director already exists. Only one Assistant_Director is allowed." });
+      return res
+        .status(405)
+        .json({
+          message:
+            "An Assistant_Director already exists. Only one Assistant_Director is allowed.",
+        });
     }
   }
   if (req.body.roles && req.body.roles.Assistant_District_Registar) {
-    
-    const existingAssistant_District_Registar = await Employee.findOne({ "roles.Assistant_District_Registar": { $exists: true }, _id: { $ne: req.params.id } });
+    const existingAssistant_District_Registar = await Employee.findOne({
+      "roles.Assistant_District_Registar": { $exists: true },
+      _id: { $ne: req.params.id },
+    });
     if (existingAssistant_District_Registar) {
-      return res.status(405).json({ message: "An Assistant_District_Registar already exists. Only one Assistant_District_Registar is allowed." });
+      return res
+        .status(405)
+        .json({
+          message:
+            "An Assistant_District_Registar already exists. Only one Assistant_District_Registar is allowed.",
+        });
     }
   }
   if (req.body.roles && req.body.roles.Cheif_Clerk) {
-    
-    const existingCheif_Clerk = await Employee.findOne({ "roles.Cheif_Clerk": { $exists: true }, _id: { $ne: req.params.id } });
+    const existingCheif_Clerk = await Employee.findOne({
+      "roles.Cheif_Clerk": { $exists: true },
+      _id: { $ne: req.params.id },
+    });
     if (existingCheif_Clerk) {
-      return res.status(405).json({ message: "A Cheif_Clerk already exists. Only one Cheif_Clerk is allowed." });
+      return res
+        .status(405)
+        .json({
+          message:
+            "A Cheif_Clerk already exists. Only one Cheif_Clerk is allowed.",
+        });
     }
   }
   if (req.body.roles && req.body.roles.Accountant) {
-    
-    const existingAccountant = await Employee.findOne({ "roles.Accountant": { $exists: true }, _id: { $ne: req.params.id } });
+    const existingAccountant = await Employee.findOne({
+      "roles.Accountant": { $exists: true },
+      _id: { $ne: req.params.id },
+    });
     if (existingAccountant) {
-      return res.status(405).json({ message: "An Accountant already exists. Only one Accountant is allowed." });
+      return res
+        .status(405)
+        .json({
+          message:
+            "An Accountant already exists. Only one Accountant is allowed.",
+        });
     }
   }
   if (req.body.roles && req.body.roles.Administrative_Officer) {
-   
-    const existingAdministrative_Officer = await Employee.findOne({ "roles.Administrative_Officer": { $exists: true }, _id: { $ne: req.params.id } });
+    const existingAdministrative_Officer = await Employee.findOne({
+      "roles.Administrative_Officer": { $exists: true },
+      _id: { $ne: req.params.id },
+    });
     if (existingAdministrative_Officer) {
-      return res.status(405).json({ message: "An Administrative_Officer already exists. Only one Administrative_Officer is allowed." });
+      return res
+        .status(405)
+        .json({
+          message:
+            "An Administrative_Officer already exists. Only one Administrative_Officer is allowed.",
+        });
     }
   }
 
+  try {
+    const reportData = await Employee.findOne({ _id: req.params.id });
+    if (!reportData) return res.status(404).json({ error: "Report not found" });
 
+    // Update beneficiaries
+    await beneficiaryModel.updateMany(
+      { officerid: reportData.eid },
+      { officerid: req.body.eid }
+    );
 
-    try {
-     
-      const reportData = await Employee.findOne({ _id: req.params.id });
-      if (!reportData) return res.status(404).json({ error: "Report not found" });
-      
-      await Employee.updateOne(
-        { _id: req.params.id },
-        {
-          $set: {
-            eid: req.body.eid,
-            name: req.body.name,
-            nic: req.body.nic,
-            roles:req.body.roles,
-            phoneNumber:req.body.phoneNumber,
-            department:req.body.department,
-            email:req.body.email,
-          },
-          $push: { subject: { $each: req.body.subject },report: { $each: req.body.report } },
-        }
-      );
-  
-      
-      res.status(200).json({ message: "Report updated" });
-    } catch (error) {
-      
-      res.status(500).json({ error: "Internal server error" });
-    }
-  };
+    // Update user
+    await User.updateMany(
+      { username: reportData.eid },
+      { username: req.body.eid }
+    );
+
+    await Employee.updateOne(
+      { _id: req.params.id },
+      {
+        $set: {
+          eid: req.body.eid,
+          name: req.body.name,
+          nic: req.body.nic,
+          roles: req.body.roles,
+          phoneNumber: req.body.phoneNumber,
+          department: req.body.department,
+          email: req.body.email,
+        },
+        $push: {
+          subject: { $each: req.body.subject },
+          report: { $each: req.body.report },
+        },
+      }
+    );
+
+    res.status(200).json({ message: "Report updated" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
   
  
   const deleteSub = async (req, res) => {
