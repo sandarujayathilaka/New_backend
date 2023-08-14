@@ -2,7 +2,8 @@ const Record = require('../models/beneficiaryModel');
 
 const deleteOldRecords = async () => {
   const expirationDate = new Date();
-  expirationDate.setDate(expirationDate.getDate() - 30);
+  expirationDate.setMonth(expirationDate.getMonth() - 6);
+  
 
   try {
     await Record.deleteMany({
